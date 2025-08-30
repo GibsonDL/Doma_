@@ -1,14 +1,19 @@
 #include "vk_engine.h"
 
-int main(int argc, char* argv[])
-{
-    VulkanEngine engine;
+#include <SDL.h>
+#include <SDL_vulkan.h>
 
-    engine.init();
+#include <vk_initializers.h>
+#include <vk_types.h>
+#include <iostream>
+#include <chrono>
+#include <iostream>
+#include <thread>
+constexpr bool bUseValidationLayers = false;
 
-    engine.run();
+VulkanEngine* loadedEngine = nullptr;
 
-    engine.cleanup();
+VulkanEngine& VulkanEngine::Get() {return *loadedEngine;}
+void VulkanEngine::init() {
 
-    return 0;
 }

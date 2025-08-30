@@ -13,10 +13,10 @@
 #include <vulkan/vk_enum_string_helper.h>
 #include <vk_mem_alloc.h>
 
-#include <fmt/core.h>
+#include <core.h>
 
-#include <glm/mat4x4.hpp>
-#include <glm/vec4.hpp>
+#include <mat4x4.hpp>
+#include <vec4.hpp>
 #define VK_CHECK(x)                                                     \
 do {                                                                \
 VkResult err = x;                                               \
