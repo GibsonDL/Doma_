@@ -33,4 +33,5 @@ add_executable(Doma_
         src/vk_initializers.cpp
         src/vk_initializers.h
        )
-target_link_libraries(Doma_ PRIVATE SDL3::SDL3)
+target_link_libraries(Doma_ PRIVATE SDL3::SDL3 vkbootstrap)
+
