@@ -16,7 +16,6 @@ add_subdirectory(src/third_party
 
 include_directories(src/
         src/third_party/vkbootstrap
-        src/third_party/vmt
         src/third_party/fmt/include/fmt/
         src/third_party/vma/
         src/third_party/volk/
@@ -32,6 +31,8 @@ add_executable(Doma_
         src/vk_types.h
         src/vk_initializers.cpp
         src/vk_initializers.h
-       )
-target_link_libraries(Doma_ PRIVATE SDL3::SDL3 vkbootstrap)
+        src/vk_images.cpp
+        src/vk_images.h
+)
+target_link_libraries(Doma_ PRIVATE SDL3::SDL3 vkbootstrap fmt::fmt)
 

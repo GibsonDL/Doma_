@@ -2,8 +2,25 @@
 
 #include <vk_types.h>
 
+
+struct FrameData {
+	VkSemaphore _swapchainSemaphore, _renderSemaphore;
+	VkFence _renderFence;
+	VkCommandPool _commandPool;
+	VkCommandBuffer _mainCommandBuffer;
+
+};
+constexpr unsigned int FRAME_OVERLAP = 2;
+
 class VulkanEngine {
+
 public:
+	FrameData _frames[FRAME_OVERLAP];
+	FrameData _balls;
+	FrameData& get_current_frame(){ return _frames[_frameNumber % FRAME_OVERLAP];};
+
+	VkQueue _graphicsQueue;
+	uint32_t _graphicsQueueFamily;
 
 	bool _isInitialized{ false };
 	int _frameNumber {0};
@@ -27,6 +44,7 @@ public:
 	struct SDL_Window* _window{ nullptr };
 
 	static VulkanEngine& Get();
+
 
 	//initializes everything in the engine
 	void init();
