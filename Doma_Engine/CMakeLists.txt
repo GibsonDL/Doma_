@@ -23,6 +23,8 @@ include_directories(src/
         src/third_party/imgui/
         src/third_party/fastgltf/include/fastgltf/
         src/third_party/SDL/include/
+        src/third_party/SDL/src/
+        src/shaders/
 )
 add_executable(Doma_
         src/main.cpp
@@ -33,6 +35,10 @@ add_executable(Doma_
         src/vk_initializers.h
         src/vk_images.cpp
         src/vk_images.h
+        src/vk_descriptors.cpp
+        src/vk_descriptors.h
+        src/vk_pipelines.cpp
+        src/vk_pipelines.h
 )
-target_link_libraries(Doma_ PRIVATE SDL3::SDL3 vkbootstrap fmt::fmt)
+target_link_libraries(Doma_ PRIVATE SDL3::SDL3 vkbootstrap fmt::fmt )
 

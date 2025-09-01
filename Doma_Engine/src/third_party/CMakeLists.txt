@@ -27,8 +27,8 @@ target_include_directories(glm INTERFACE glm)
 
 add_library(sdl3 INTERFACE)
 
-target_include_directories(sdl3 INTERFACE $ENV{VULKAN_SDK}/Include/SDL2 )
-target_include_directories(sdl3 INTERFACE $ENV{VULKAN_SDK}/Include/SDL2 )
+target_include_directories(sdl3 INTERFACE $ENV{VULKAN_SDK}/Include/SDL3 )
+target_include_directories(sdl3 INTERFACE $ENV{VULKAN_SDK}/Include/SDL3 )
 target_link_directories(sdl3 INTERFACE $ENV{VULKAN_SDK}/Lib )
 
 target_link_libraries(sdl3 INTERFACE SDL3 SDL3::SDL3)
