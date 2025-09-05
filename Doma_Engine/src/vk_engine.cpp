@@ -12,7 +12,7 @@
 #include <thread>
 #include "VkBootstrap.h"
 #include "vk_images.h"
-#define VMA_IMPLIMENTATION
+#define VMA_IMPLEMENTATION
 #include "vk_mem_alloc.h"
 #include "vk_pipelines.h"
 
@@ -63,12 +63,12 @@ void VulkanEngine::init_background_pipelines()
     computeLayout.pSetLayouts = &_drawImageDescriptorLayout;
     computeLayout.setLayoutCount = 1;
 
-    VK_CHECK(vkCreatePipelineLayout(_device, &computeLayout, nullptr, &_gradientPipelineLayout));
+    (vkCreatePipelineLayout(_device, &computeLayout, nullptr, &_gradientPipelineLayout));
     //layout code
     VkShaderModule computeDrawShader;
-    if (!vkutil::load_shader_module("gradient.comp.spv", _device, &computeDrawShader))
+    if (!vkutil::load_shader_module("/home/glum/Doma_/Doma_Engine/src/shaders/gradient.comp.spv", _device, &computeDrawShader))
     {
-        fmt::print("Error when building the compute shader \n");
+        std::printf("Error when building the compute shader \n");
     }
 
     VkPipelineShaderStageCreateInfo stageinfo{};
@@ -84,7 +84,7 @@ void VulkanEngine::init_background_pipelines()
     computePipelineCreateInfo.layout = _gradientPipelineLayout;
     computePipelineCreateInfo.stage = stageinfo;
 
-    VK_CHECK(vkCreateComputePipelines(_device,VK_NULL_HANDLE,1,&computePipelineCreateInfo, nullptr, &_gradientPipeline));
+    (vkCreateComputePipelines(_device,VK_NULL_HANDLE,1,&computePipelineCreateInfo, nullptr, &_gradientPipeline));
 
     vkDestroyShaderModule(_device, computeDrawShader, nullptr);
 
@@ -168,12 +168,12 @@ void VulkanEngine::init_commands() {
     commandPoolInfo.queueFamilyIndex = _graphicsQueueFamily;
 
     for (int i = 0; i < FRAME_OVERLAP; i++) {
-        VK_CHECK(vkCreateCommandPool(_device,&commandPoolInfo, nullptr, &_frames[i]._commandPool));
+        (vkCreateCommandPool(_device,&commandPoolInfo, nullptr, &_frames[i]._commandPool));
 
         //allocate the default command buffer that we will use for rendering
         VkCommandBufferAllocateInfo cmdAllocInfo = vkinit::command_buffer_allocate_info(_frames[i]._commandPool, 1);
 
-        VK_CHECK(vkAllocateCommandBuffers(_device, &cmdAllocInfo, &_frames[i]._mainCommandBuffer));
+        (vkAllocateCommandBuffers(_device, &cmdAllocInfo, &_frames[i]._mainCommandBuffer));
     }
 
 }
@@ -186,10 +186,10 @@ void VulkanEngine::init_sync_structures() {
     VkSemaphoreCreateInfo semaphoreCreateInfo = vkinit::semaphore_create_info();
 
     for (int i = 0; i < FRAME_OVERLAP; i++) {
-        VK_CHECK(vkCreateFence(_device,&fenceCreateInfo, nullptr, &_frames[i]._renderFence));
+        (vkCreateFence(_device,&fenceCreateInfo, nullptr, &_frames[i]._renderFence));
 
-        VK_CHECK(vkCreateSemaphore(_device, &semaphoreCreateInfo, nullptr, &_frames[i]._swapchainSemaphore));
-        VK_CHECK(vkCreateSemaphore(_device, &semaphoreCreateInfo, nullptr, &_frames[i]._renderSemaphore));
+        (vkCreateSemaphore(_device, &semaphoreCreateInfo, nullptr, &_frames[i]._swapchainSemaphore));
+        (vkCreateSemaphore(_device, &semaphoreCreateInfo, nullptr, &_frames[i]._renderSemaphore));
 
     }
 
@@ -295,7 +295,7 @@ void VulkanEngine::init_swapchain() {
     //build a image-view for the draw image to use for rendering
     VkImageViewCreateInfo rview_info = vkinit::imageview_create_info(_drawImage.imageFormat, _drawImage.image, VK_IMAGE_ASPECT_COLOR_BIT);
 
-    VK_CHECK(vkCreateImageView(_device, &rview_info, nullptr, &_drawImage.imageView));
+    (vkCreateImageView(_device, &rview_info, nullptr, &_drawImage.imageView));
 
     //add to deletion queues
     _mainDeletionQueue.push_function([=]() {
@@ -355,16 +355,16 @@ void VulkanEngine::draw() {
     //> draw_1
     // wait until the gpu has finished rendering the last frame. Timeout of 1
     // second
-    VK_CHECK(vkWaitForFences(_device, 1, &get_current_frame()._renderFence, true, 1000000000));
+    (vkWaitForFences(_device, 1, &get_current_frame()._renderFence, true, 1000000000));
 
     get_current_frame()._deletionQueue.flush();
 
-    VK_CHECK(vkResetFences(_device, 1, &get_current_frame()._renderFence));
+    (vkResetFences(_device, 1, &get_current_frame()._renderFence));
     //<draw 1
     //> draw_2
     //request image from the swapchain
     uint32_t swapchainImageIndex;
-    VK_CHECK(vkAcquireNextImageKHR(_device, _swapchain, 1000000000, get_current_frame()._swapchainSemaphore, nullptr, &swapchainImageIndex));
+    (vkAcquireNextImageKHR(_device, _swapchain, 1000000000, get_current_frame()._swapchainSemaphore, nullptr, &swapchainImageIndex));
     //< draw_2
 
 
@@ -374,7 +374,7 @@ void VulkanEngine::draw() {
 
     // now that we are sure that the commands finished executing, we can safely
     // reset the command buffer to begin recording again.
-    VK_CHECK(vkResetCommandBuffer(cmd, 0));
+    (vkResetCommandBuffer(cmd, 0));
 
     //begin the command buffer recording. We will use this command buffer exactly once, so we want to let vulkan know that
     VkCommandBufferBeginInfo cmdBeginInfo = vkinit::command_buffer_begin_info(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
@@ -382,7 +382,7 @@ void VulkanEngine::draw() {
     _drawExtent.width = _drawImage.imageExtent.width;
     _drawExtent.height = _drawImage.imageExtent.height;
 
-    VK_CHECK(vkBeginCommandBuffer(cmd, &cmdBeginInfo));
+    (vkBeginCommandBuffer(cmd, &cmdBeginInfo));
 
     // transition our main draw image into general layout so we can write into it
     // we will overwrite it all so we dont care about what was the older layout
@@ -401,7 +401,7 @@ void VulkanEngine::draw() {
     vkutil::transition_image(cmd, _swapchainImages[swapchainImageIndex], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
 
     //finalize the command buffer (we can no longer add commands, but it can now be executed)
-    VK_CHECK(vkEndCommandBuffer(cmd));
+    (vkEndCommandBuffer(cmd));
     //< draw_4
 
     //> draw_5
@@ -418,7 +418,7 @@ void VulkanEngine::draw() {
 
     //submit command buffer to the queue and execute it.
     // _renderFence will now block until the graphic commands finish execution
-    VK_CHECK(vkQueueSubmit2(_graphicsQueue, 1, &submit, get_current_frame()._renderFence));
+    (vkQueueSubmit2(_graphicsQueue, 1, &submit, get_current_frame()._renderFence));
     //< draw_5
     //> draw_6
     //prepare present
@@ -436,7 +436,7 @@ void VulkanEngine::draw() {
 
     presentInfo.pImageIndices = &swapchainImageIndex;
 
-    VK_CHECK(vkQueuePresentKHR(_graphicsQueue, &presentInfo));
+    (vkQueuePresentKHR(_graphicsQueue, &presentInfo));
 
     //increase the number of frames drawn
     _frameNumber++;

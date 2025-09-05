@@ -3,9 +3,7 @@
 #include <vk_initializers.h>
 
 
-bool vkutil::load_shader_module(const char* filePath,
-    VkDevice device,
-    VkShaderModule* outShaderModule)
+bool vkutil::load_shader_module(const char* filePath, VkDevice device, VkShaderModule* outShaderModule)
     {
         // open the file. With cursor at the end
         std::ifstream file(filePath, std::ios::ate | std::ios::binary);
@@ -44,6 +42,7 @@ bool vkutil::load_shader_module(const char* filePath,
         // check that the creation goes well.
         VkShaderModule shaderModule;
         if (vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
+            std::printf("two balls");
             return false;
         }
         *outShaderModule = shaderModule;

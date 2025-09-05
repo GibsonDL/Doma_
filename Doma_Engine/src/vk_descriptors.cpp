@@ -34,7 +34,7 @@ VkDescriptorSetLayout DescriptorLayoutBuilder::build(VkDevice device, VkShaderSt
     info.flags = flags;
 
     VkDescriptorSetLayout set;
-    VK_CHECK(vkCreateDescriptorSetLayout(device, &info, nullptr, &set));
+    vkCreateDescriptorSetLayout(device, &info, nullptr, &set);
 
     return set;
 }
@@ -76,7 +76,7 @@ VkDescriptorSet DescriptorAllocator::allocate(VkDevice device, VkDescriptorSetLa
     allocInfo.pSetLayouts = &layout;
 
     VkDescriptorSet ds;
-    VK_CHECK(vkAllocateDescriptorSets(device, &allocInfo, &ds));
+    vkAllocateDescriptorSets(device, &allocInfo, &ds);
 
     return ds;
 }
